@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2014 | 大强之力</title>
+  <title>runtime从原理到实践之实践篇(1) | 大强之力</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="大强之力">
-<meta property="og:url" content="http://ldaqiangl.com/blog/archives/2014/index.html">
+  <meta name="description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="runtime从原理到实践之实践篇(1)">
+<meta property="og:url" content="http://ldaqiangl.com/blog/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/index.html">
 <meta property="og:site_name" content="大强之力">
-<meta property="og:description">
+<meta property="og:description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
+<meta property="og:updated_time" content="2016-03-25T07:56:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="大强之力">
-<meta name="twitter:description">
+<meta name="twitter:title" content="runtime从原理到实践之实践篇(1)">
+<meta name="twitter:description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
   
     <link rel="alternative" href="/atom.xml" title="大强之力" type="application/atom+xml">
   
@@ -190,206 +194,110 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-runtime从原理到实践/2016-03-25-runtime从原理到实践" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2014" class="archive-year">2014</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2014/03/20/hello-world/" class="archive-article-date">
-  	<time datetime="2014-03-20T13:49:20.000Z" itemprop="datePublished">Mar 20</time>
+    <div class="article-meta">
+      <a href="/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/" class="article-date">
+  	<time datetime="2016-03-25T07:03:17.000Z" itemprop="datePublished">2016-03-25</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/03/20/hello-world/">Hello World</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      runtime从原理到实践之实践篇(1)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
+      </header>
       
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/" class="archive-article-date">
-  	<time datetime="2016-03-25T07:03:17.000Z" itemprop="datePublished">Mar 25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/">runtime从原理到实践之实践篇(1)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/runtime/">runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂</p>
+<h3 id="抚今追昔"><a href="#抚今追昔" class="headerlink" title="抚今追昔"></a>抚今追昔</h3><p>从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来没在实际开发总用到过 <strong><em>(当然，唯一用到就是KVO)</em></strong> ,这一次想花时间系统归纳整理以往的知识加以总结,runtime就是不可回避的一个专题了。。。闲话不多说了,既然说到runtime,那就先看看为什么要用它，它的用途何在</p>
+<p>要说runtime是什么，用苹果官方的说法，叫做：<code>The runtime system is a dynamic shared library with a public interface consisting of a set of functions and data structures in the header files located within the directory /usr/include/objc.</code><br>大致意思就很明显了 runtime是苹果用C/C++封装的一个动态库，用来提供一系列功能函数和结构体数据，这个库的路径也说了在/usr/include/objc路径下。</p>
+
+      
+    </div>
+    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/23/studyPlan2016/2016-03-23-studyPlan2016/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">2016年学习计划</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/20/hexoFirstStudy-index/" class="archive-article-date">
-  	<time datetime="2016-02-20T13:49:20.000Z" itemprop="datePublished">Feb 20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/20/hexoFirstStudy-index/">firstHexoStudy</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/23/studyPlan2016/2016-03-23-studyPlan2016/" class="archive-article-date">
-  	<time datetime="2016-03-23T10:28:37.000Z" itemprop="datePublished">Mar 23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/23/studyPlan2016/2016-03-23-studyPlan2016/">2016年学习计划</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计划/">计划</a></li></ul>
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/21/markdownStudy/2016-03-21-markdownStudy/" class="archive-article-date">
-  	<time datetime="2016-03-21T02:59:22.000Z" itemprop="datePublished">Mar 21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/21/markdownStudy/2016-03-21-markdownStudy/">markdownStudy</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技巧/">技巧</a></li></ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/22/yiliaTheme/2016-03-21-yiliaTheme/" class="archive-article-date">
-  	<time datetime="2016-03-21T16:20:02.000Z" itemprop="datePublished">Mar 22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/22/yiliaTheme/2016-03-21-yiliaTheme/">yilia 主题学习</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="runtime从原理到实践/2016-03-25-runtime从原理到实践" data-title="runtime从原理到实践之实践篇(1)" data-url="http://ldaqiangl.com/blog/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
 
 
 </div>
@@ -419,8 +327,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

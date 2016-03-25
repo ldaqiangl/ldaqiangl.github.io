@@ -77,7 +77,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/技巧/" style="font-size: 10px;">技巧</a> <a href="/tags/计划/" style="font-size: 10px;">计划</a>
+						<a href="/tags/Objective-C/" style="font-size: 10px;">Objective-C</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/原理/" style="font-size: 10px;">原理</a> <a href="/tags/技巧/" style="font-size: 10px;">技巧</a> <a href="/tags/计划/" style="font-size: 10px;">计划</a>
 					</div>
 				</section>
 				
@@ -191,6 +191,65 @@
 </nav>
 
       <div class="body-wrap">
+	<article id="post-runtime从原理到实践/2016-03-25-runtime从原理到实践" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/" class="article-date">
+  	<time datetime="2016-03-25T07:03:17.000Z" itemprop="datePublished">2016-03-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/">runtime从原理到实践之实践篇(1)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂</p>
+<h3 id="抚今追昔"><a href="#抚今追昔" class="headerlink" title="抚今追昔"></a>抚今追昔</h3><p>从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来没在实际开发总用到过 <strong><em>(当然，唯一用到就是KVO)</em></strong> ,这一次想花时间系统归纳整理以往的知识加以总结,runtime就是不可回避的一个专题了。。。闲话不多说了,既然说到runtime,那就先看看为什么要用它，它的用途何在</p>
+<p>要说runtime是什么，用苹果官方的说法，叫做：<code>The runtime system is a dynamic shared library with a public interface consisting of a set of functions and data structures in the header files located within the directory /usr/include/objc.</code><br>大致意思就很明显了 runtime是苹果用C/C++封装的一个动态库，用来提供一系列功能函数和结构体数据，这个库的路径也说了在/usr/include/objc路径下。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/runtime/">runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
 	<article id="post-studyPlan2016/2016-03-23-studyPlan2016" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -240,27 +299,27 @@
 <tr>
 <td>3月份</td>
 <td>iOS/H5 draw</td>
-<td>精</td>
+<td>精(博客总结)</td>
 </tr>
 <tr>
 <td>4月份</td>
 <td>iOS runtime/Node.js</td>
-<td>精</td>
+<td>精(博客总结)</td>
 </tr>
 <tr>
 <td>4月份</td>
 <td>消息机制</td>
-<td>精</td>
+<td>精(博客总结)</td>
 </tr>
 <tr>
 <td>5月份</td>
 <td>iOS autoLayout</td>
-<td>精</td>
+<td>精(博客总结)</td>
 </tr>
 <tr>
 <td>6月份</td>
 <td>Html5、JavaScript应用</td>
-<td>熟</td>
+<td>熟(博客总结)</td>
 </tr>
 </tbody>
 </table>
@@ -412,7 +471,7 @@
 <h4 id="Blockqutoes"><a href="#Blockqutoes" class="headerlink" title="Blockqutoes"></a>Blockqutoes</h4><blockquote>
 <p>Right andgle brackets &gt; are used for block queote</p>
 </blockquote>
-<h4 id="Links-and-Emails"><a href="#Links-and-Emails" class="headerlink" title="Links and Emails"></a>Links and Emails</h4><p>An email <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x65;&#x78;&#112;&#x6d;&#112;&#x6c;&#101;&#x40;&#101;&#120;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x65;&#x78;&#112;&#x6d;&#112;&#x6c;&#101;&#x40;&#101;&#120;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a> link.</p>
+<h4 id="Links-and-Emails"><a href="#Links-and-Emails" class="headerlink" title="Links and Emails"></a>Links and Emails</h4><p>An email <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x65;&#120;&#x70;&#x6d;&#x70;&#108;&#101;&#x40;&#101;&#x78;&#97;&#x6d;&#112;&#108;&#x65;&#x2e;&#99;&#111;&#109;">&#x65;&#120;&#x70;&#x6d;&#x70;&#108;&#101;&#x40;&#101;&#x78;&#97;&#x6d;&#112;&#108;&#x65;&#x2e;&#99;&#111;&#109;</a> link.</p>
 <p>Simple inline link <http:chenluois.com>, another inner link <a href="http://25.io/smaller/" target="_blank" rel="external">SM</a><br>with title <a href="http:resizesafari.com" title="a Safari extension" target="_blank" rel="external">Resize</a>.</http:chenluois.com></p>
 <p>A <a href="http://25.io/mou/" title="Mardown editor on Mac OS X" target="_blank" rel="external">reference style</a> link. Input id, then anywhere in the doc,define the link<br>with corresponding id:<br>Titles (or called tool tips) in the links are optional.</p>
 <h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><p>An inline image <img src="http://25.io/smaller/favicon.ico" alt="Smller icon" title="Title here">, title is optional.<br>A <img src="http://resizesafari.com/favicon.ico" alt="Resize icon" title="Title"> reference style image.</p>
