@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>runtime从原理到实践之实践篇(1) | 大强之力</title>
+  <title>runtime从原理到实践之原理篇(1) | 大强之力</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
-抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
+  <meta name="description" content="概要这个系列的博文我们依次会接触到 Objective-C类对象、对象、元类、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+runtime基本认知从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻">
 <meta property="og:type" content="article">
-<meta property="og:title" content="runtime从原理到实践之实践篇(1)">
+<meta property="og:title" content="runtime从原理到实践之原理篇(1)">
 <meta property="og:url" content="http://ldaqiangl.com/blog/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/index.html">
 <meta property="og:site_name" content="大强之力">
-<meta property="og:description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
-抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
-<meta property="og:updated_time" content="2016-03-25T07:56:57.000Z">
+<meta property="og:description" content="概要这个系列的博文我们依次会接触到 Objective-C类对象、对象、元类、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+runtime基本认知从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻">
+<meta property="og:updated_time" content="2016-06-16T03:28:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="runtime从原理到实践之实践篇(1)">
-<meta name="twitter:description" content="概要这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
-抚今追昔从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来">
+<meta name="twitter:title" content="runtime从原理到实践之原理篇(1)">
+<meta name="twitter:description" content="概要这个系列的博文我们依次会接触到 Objective-C类对象、对象、元类、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂
+runtime基本认知从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻">
   
     <link rel="alternative" href="/atom.xml" title="大强之力" type="application/atom+xml">
   
@@ -81,7 +81,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -118,7 +118,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Objective-C/" style="font-size: 10px;">Objective-C</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/原理/" style="font-size: 10px;">原理</a> <a href="/tags/技巧/" style="font-size: 10px;">技巧</a> <a href="/tags/计划/" style="font-size: 10px;">计划</a>
+						<a href="/tags/Objective-C/" style="font-size: 10px;">Objective-C</a> <a href="/tags/experience/" style="font-size: 10px;">experience</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/原理/" style="font-size: 10px;">原理</a> <a href="/tags/常识/" style="font-size: 10px;">常识</a> <a href="/tags/技巧/" style="font-size: 10px;">技巧</a> <a href="/tags/案例/" style="font-size: 10px;">案例</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/计划/" style="font-size: 10px;">计划</a>
 					</div>
 				</section>
 				
@@ -211,7 +211,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      runtime从原理到实践之实践篇(1)
+      runtime从原理到实践之原理篇(1)
     </h1>
   
 
@@ -220,7 +220,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/runtime/">runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
 	</div>
 
         
@@ -231,9 +231,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>这个系列的博文我们依次会讨论到 Objective-C类和对象、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂</p>
-<h3 id="抚今追昔"><a href="#抚今追昔" class="headerlink" title="抚今追昔"></a>抚今追昔</h3><p>从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来没在实际开发总用到过 <strong><em>(当然，唯一用到就是KVO)</em></strong> ,这一次想花时间系统归纳整理以往的知识加以总结,runtime就是不可回避的一个专题了。。。闲话不多说了,既然说到runtime,那就先看看为什么要用它，它的用途何在</p>
+        <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>这个系列的博文我们依次会接触到 Objective-C类对象、对象、元类、isa、IMP、KVO/KVC、runtime等等,每个概念都会去探根问底,因为每个小细节都可能让人云里雾里,这次必须要把底层原理层面的东西弄彻底了的😂</p>
+<h3 id="runtime基本认知"><a href="#runtime基本认知" class="headerlink" title="runtime基本认知"></a>runtime基本认知</h3><p>从开始从事iOS那天起,就开始听说runtime,后来有点时间就会去看看这方面的博客、论坛和demo，但不造是时间有限还是原理太深，每次看都是蜻蜓点水,浅尝辄止,也从来没在实际开发总用到过 <strong><em>(当然，唯一用到就是KVO)</em></strong> ,这一次想花时间系统归纳整理以往的知识加以总结,runtime就是不可回避的一个专题了。。。闲话不多说了,先捋清楚几个相关的基本概念</p>
+<ol>
+<li><p>运行时<br>在苹果的Cocoa和Fundation框架里，运行时指的即是runtime了，但是，从代码从编写到加载到内存并且跑起来的角度看，其实就是指加载到内存后开始运行的一个阶段（编译-连接-运行）</p>
+</li>
+<li><p>动态编程语言（像OC这种）<br>动态编程语言不单单有我们的Objective-C，其他有啥大家自行Google，总之有一点，就是：运行时再决定对象的类型、绑定方法和属性以及动态加载资源（如2x和3x图片）</p>
+</li>
+<li><p>消息机制<br>消息机制是runtime乃至整个OC开发的基石，正因为有它，所以</p>
+</li>
+</ol>
+<p>4.</p>
 <p>要说runtime是什么，用苹果官方的说法，叫做：<code>The runtime system is a dynamic shared library with a public interface consisting of a set of functions and data structures in the header files located within the directory /usr/include/objc.</code><br>大致意思就很明显了 runtime是苹果用C/C++封装的一个动态库，用来提供一系列功能函数和结构体数据，这个库的路径也说了在/usr/include/objc路径下。</p>
+<p>在这个路径下苹果用C的API封装了从动态的创建类(方法)、改变</p>
 
       
     </div>
@@ -242,6 +252,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/06/15/制作静态库/2016-06-15-制作静态库/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          制作静态库
+        
+      </div>
+    </a>
   
   
     <a href="/2016/03/23/studyPlan2016/2016-03-23-studyPlan2016/" id="article-nav-older" class="article-nav-link-wrap">
@@ -280,7 +299,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="runtime从原理到实践/2016-03-25-runtime从原理到实践" data-title="runtime从原理到实践之实践篇(1)" data-url="http://ldaqiangl.com/blog/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/"></div>
+	<div class="ds-thread" data-thread-key="runtime从原理到实践/2016-03-25-runtime从原理到实践" data-title="runtime从原理到实践之原理篇(1)" data-url="http://ldaqiangl.com/blog/2016/03/25/runtime从原理到实践/2016-03-25-runtime从原理到实践/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
