@@ -16,22 +16,22 @@
 <meta property="og:description" content="问：App Store审核有时候会反馈给一些crash日志信息文件，但是自己又无法轻易复现该bug，需要怎么样去分析这些crash文件呢？
 答：使用苹果提供的symbolicatecrash工具来有效分析和定位bug的堆栈信息，具体步骤如下（当然也包含若干使用上遇到的问题）：
 1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）打开Xcode -&amp;gt; W">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001_1">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001_2">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash002">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash003">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash004">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash005">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash006">
-<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash007">
-<meta property="og:updated_time" content="2017-04-13T06:40:29.000Z">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001_1.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001_2.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash002.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash003.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash004.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash005.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash006.png">
+<meta property="og:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash007.png">
+<meta property="og:updated_time" content="2017-04-13T06:45:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用symbolicatecrash分析crash日志">
 <meta name="twitter:description" content="问：App Store审核有时候会反馈给一些crash日志信息文件，但是自己又无法轻易复现该bug，需要怎么样去分析这些crash文件呢？
 答：使用苹果提供的symbolicatecrash工具来有效分析和定位bug的堆栈信息，具体步骤如下（当然也包含若干使用上遇到的问题）：
 1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）打开Xcode -&amp;gt; W">
-<meta name="twitter:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001">
+<meta name="twitter:image" content="http://ldaqiangl.com/blog/img/symbolicatecrash/symbolicatecrash001.png">
   
     <link rel="alternative" href="/atom.xml" title="大强之力" type="application/atom+xml">
   
@@ -246,19 +246,19 @@
       
         <p><strong>问：App Store审核有时候会反馈给一些crash日志信息文件，但是自己又无法轻易复现该bug，需要怎么样去分析这些crash文件呢？</strong></p>
 <p><strong>答：使用苹果提供的symbolicatecrash工具来有效分析和定位bug的堆栈信息，具体步骤如下（当然也包含若干使用上遇到的问题）：</strong></p>
-<h3 id="1、收集到上线对应应用的符号表文件（xxx-app-dSYM）和二进制文件（xxx-app）"><a href="#1、收集到上线对应应用的符号表文件（xxx-app-dSYM）和二进制文件（xxx-app）" class="headerlink" title="1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）"></a>1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）</h3><p>打开<code>Xcode -&gt; Window -&gt; Organizer</code>，选中相应的应用，如图所示：<br><img src="/img/symbolicatecrash/symbolicatecrash001" alt="symbolicatecrash001"><br>然后，右击，<code>Show in Finder</code>，<br>然后，右击，显示包内容：<br>在其他地方（我是在桌面）新建一个文件，我命名为：<code>Crash</code><br>然后，在上述包内容文件夹里分别找到：<code>/dSYMs/xxx.app.dSYM</code> 和 <code>/Products/Applications/xxx.app</code> 文件，并将其拷贝至桌面的<code>Crash</code>文件夹内<br><img src="/img/symbolicatecrash/symbolicatecrash001_1" alt="symbolicatecrash001_1"><br><img src="/img/symbolicatecrash/symbolicatecrash001_2" alt="symbolicatecrash001_2"></p>
-<h3 id="2、查找和提取到symbolicatecrash工具"><a href="#2、查找和提取到symbolicatecrash工具" class="headerlink" title="2、查找和提取到symbolicatecrash工具"></a>2、查找和提取到symbolicatecrash工具</h3><p>（1）使用 <code>find /Applications/Xcode.app -name symbolicatecrash -type f</code> 命令找到要使用的<code>symbolicatecrash</code> 工具，结果如图：<br><img src="/img/symbolicatecrash/symbolicatecrash002" alt="symbolicatecrash002"></p>
+<h3 id="1、收集到上线对应应用的符号表文件（xxx-app-dSYM）和二进制文件（xxx-app）"><a href="#1、收集到上线对应应用的符号表文件（xxx-app-dSYM）和二进制文件（xxx-app）" class="headerlink" title="1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）"></a>1、收集到上线对应应用的符号表文件（xxx.app.dSYM）和二进制文件（xxx.app）</h3><p>打开<code>Xcode -&gt; Window -&gt; Organizer</code>，选中相应的应用，如图所示：<br><img src="/img/symbolicatecrash/symbolicatecrash001.png" alt="symbolicatecrash001"><br>然后，右击，<code>Show in Finder</code>，<br>然后，右击，显示包内容：<br>在其他地方（我是在桌面）新建一个文件，我命名为：<code>Crash</code><br>然后，在上述包内容文件夹里分别找到：<code>/dSYMs/xxx.app.dSYM</code> 和 <code>/Products/Applications/xxx.app</code> 文件，并将其拷贝至桌面的<code>Crash</code>文件夹内<br><img src="/img/symbolicatecrash/symbolicatecrash001_1.png" alt="symbolicatecrash001_1"><br><img src="/img/symbolicatecrash/symbolicatecrash001_2.png" alt="symbolicatecrash001_2"></p>
+<h3 id="2、查找和提取到symbolicatecrash工具"><a href="#2、查找和提取到symbolicatecrash工具" class="headerlink" title="2、查找和提取到symbolicatecrash工具"></a>2、查找和提取到symbolicatecrash工具</h3><p>（1）使用 <code>find /Applications/Xcode.app -name symbolicatecrash -type f</code> 命令找到要使用的<code>symbolicatecrash</code> 工具，结果如图：<br><img src="/img/symbolicatecrash/symbolicatecrash002.png" alt="symbolicatecrash002"></p>
 <blockquote>
 <p>说明：<code>symbolicatecrash</code> 的工具文件夹在<code>Xcode8.3</code>里是这个路径下的位置，但是在之前的版本中，会有不同的位置，请是具体情况自行查找到目标文件</p>
 </blockquote>
 <p>（2）然后将工具拷贝到 上一步骤中的 Crash文件夹中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework/Versions/A/Resources/symbolicatecrash /Users/dongfuqiang/Desktop/Crash</span><br></pre></td></tr></table></figure></p>
-<p>结果如图：<br><img src="/img/symbolicatecrash/symbolicatecrash003" alt="symbolicatecrash003"></p>
+<p>结果如图：<br><img src="/img/symbolicatecrash/symbolicatecrash003.png" alt="symbolicatecrash003"></p>
 <h3 id="3、分析Crash日志"><a href="#3、分析Crash日志" class="headerlink" title="3、分析Crash日志"></a>3、分析Crash日志</h3><p>（1）将要分析的文件放进<code>Crash</code>文件夹，如果苹果反馈的文件为<code>.txt</code>文件，请把后缀名改为<code>.crash</code><br>（2）使用命令，分析目标文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./symbolicatecrash /Users/dongfuqiang/Desktop/Crash/at</span><br><span class="line">tachment-2984565074812063208crashlog-410C678E-284A-4D9A-AB75-1B4585459D11.crash</span><br><span class="line">/Users/dongfuqiang/Desktop/Crash/kangs100Doc.app.dSYM &gt; kangs100Doc_symbol01.c</span><br><span class="line">rash</span><br></pre></td></tr></table></figure></p>
-<p>（3）可能会出现如图错误：<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69</code>.<br><img src="/img/symbolicatecrash/symbolicatecrash004" alt="symbolicatecrash004"><br>解决办法是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export DEVELOPER_DIR=&quot;/Applications/Xcode.app/Contents/Developer&quot;</span><br></pre></td></tr></table></figure></p>
+<p>（3）可能会出现如图错误：<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69</code>.<br><img src="/img/symbolicatecrash/symbolicatecrash004.png" alt="symbolicatecrash004"><br>解决办法是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export DEVELOPER_DIR=&quot;/Applications/Xcode.app/Contents/Developer&quot;</span><br></pre></td></tr></table></figure></p>
 <p>（4）然后再次执行分析命令，如果再次报错如图：<br><code>xcrun: error: invalid DEVELOPER_DIR path (/Applications/Xcode.app/Contents/SharedFrameworks), missing xcrun at: /Applications/Xcode.app/Contents/SharedFrameworks/usr/bin/xcrun
-Error: can&#39;t find tool named &#39;otool&#39; in the macosx SDK or any fallback SDKs at</code><br><img src="/img/symbolicatecrash/symbolicatecrash005" alt="symbolicatecrash005"><br>请参考：<br><a href="http://stackoverflow.com/questions/33358799/cant-find-tool-named-otool-in-the-macosx-sdk-or-any-fallback-sdks-at-symbol" target="_blank" rel="external">异常处理</a></p>
-<h3 id="4、查看和对比结果："><a href="#4、查看和对比结果：" class="headerlink" title="4、查看和对比结果："></a>4、查看和对比结果：</h3><p>最终生成的文件如图：<br><img src="/img/symbolicatecrash/symbolicatecrash006" alt="symbolicatecrash006"><br>我的两个Crash日志文件 都分别做了一次分析，</p>
-<p>最终结果对比如下图：<br><img src="/img/symbolicatecrash/symbolicatecrash007" alt="symbolicatecrash007"><br>可以看到，Crash的位置的堆栈信息得到了分析结果（对比图右侧），然后，我们可以在项目源码中查看相应的方法有什么问题，并解决。</p>
+Error: can&#39;t find tool named &#39;otool&#39; in the macosx SDK or any fallback SDKs at</code><br><img src="/img/symbolicatecrash/symbolicatecrash005.png" alt="symbolicatecrash005"><br>请参考：<br><a href="http://stackoverflow.com/questions/33358799/cant-find-tool-named-otool-in-the-macosx-sdk-or-any-fallback-sdks-at-symbol" target="_blank" rel="external">异常处理</a></p>
+<h3 id="4、查看和对比结果："><a href="#4、查看和对比结果：" class="headerlink" title="4、查看和对比结果："></a>4、查看和对比结果：</h3><p>最终生成的文件如图：<br><img src="/img/symbolicatecrash/symbolicatecrash006.png" alt="symbolicatecrash006"><br>我的两个Crash日志文件 都分别做了一次分析，</p>
+<p>最终结果对比如下图：<br><img src="/img/symbolicatecrash/symbolicatecrash007.png" alt="symbolicatecrash007"><br>可以看到，Crash的位置的堆栈信息得到了分析结果（对比图右侧），然后，我们可以在项目源码中查看相应的方法有什么问题，并解决。</p>
 <h3 id="5、其他"><a href="#5、其他" class="headerlink" title="5、其他"></a>5、其他</h3><p>看到有人不使用<code>symbolicatecrash</code>工具手动敲命令的方式解析Crash日志结果，就可以进行分析，表示<br>学习了<br><a href="http://www.cnblogs.com/max5945/p/3663966.html" target="_blank" rel="external">别用symbolicatecrash来解析crash Log了</a></p>
 
       
