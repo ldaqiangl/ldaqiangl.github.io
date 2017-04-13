@@ -1,16 +1,16 @@
 <p>今天项目有一个比较特殊的需求，想特此记录一下解决过程，进行备注并有机会进行优化更新！</p>
 <p>大致是这样：</p>
 <blockquote>
-<p>在一个导航控制器的栈顶控制器开始计数,从这里开始往后push的控制器都叫单品控制器(需求说是叫这个,实际就是一个商品详情页面),如果单品控制器超过2个后,用户点按返回的时候,只能看到倒数第二个单品控制器,到了倒数第二个单品控制器,再返回,就返回到开始计数前的那个控制器了。<br>需求图如下:<br><img src="img/experience/exp001.jpg" alt="experience001"></p>
+<p>在一个导航控制器的栈顶控制器开始计数,从这里开始往后push的控制器都叫单品控制器(需求说是叫这个,实际就是一个商品详情页面),如果单品控制器超过2个后,用户点按返回的时候,只能看到倒数第二个单品控制器,到了倒数第二个单品控制器,再返回,就返回到开始计数前的那个控制器了。<br>需求图如下:<br><img src="/img/experience/exp001.jpg" alt="experience001"></p>
 </blockquote>
-<p>最后实现了的效果图:<br><img src="img/experience/exp003.gif" alt="experience003"></p>
+<p>最后实现了的效果图:<br><img src="/img/experience/exp003.gif" alt="experience003"></p>
 <h3 id="开始-写了个demo-写了个解决方法"><a href="#开始-写了个demo-写了个解决方法" class="headerlink" title="开始,写了个demo,写了个解决方法"></a>开始,写了个demo,写了个解决方法</h3><ul>
 <li>demo内容有:</li>
 </ul>
 <ol>
 <li>建立一个根控制器充当开始计数之前的那个控制器(RootViewController)</li>
 <li>建立单品控制器(MainViewController),也就是个商品详情页</li>
-<li>keyWindow的根控制器为一个导航控制器<br>如图所示:<br><img src="img/experience/exp002.png" alt="experience002"></li>
+<li>keyWindow的根控制器为一个导航控制器<br>如图所示:<br><img src="/img/experience/exp002.png" alt="experience002"></li>
 </ol>
 <ul>
 <li>demo的参数和方法设置:</li>
@@ -36,8 +36,8 @@
 <blockquote>
 <p>问题一,MainViewController中push到下一个控制器,循环pop中的self在pop出去之后应该会释放掉<br>问题二,这个方法实现不了需求中的只是留下最后两个控制器如图:</p>
 </blockquote>
-<p><img src="img/experience/exp004.png" alt="experience004"></p>
+<p><img src="/img/experience/exp004.png" alt="experience004"></p>
 <p>可见,如果把1、2都pop出去并没有达到预期的目的:剩最后两个</p>
-<h3 id="改进的解决方案"><a href="#改进的解决方案" class="headerlink" title="改进的解决方案:"></a>改进的解决方案:</h3><p>让每下一个单品创建出来之后,有一个preVc的属性可以引用它的上一个单品控制器<br>先上图:<br><img src="img/experience/exp005.png" alt="experience005"><br>此时我们在MainViewController的.h文件中加上对上一个控制器的引用preVc:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, strong) MainViewController *preVc;</span><br></pre></td></tr></table></figure></p>
+<h3 id="改进的解决方案"><a href="#改进的解决方案" class="headerlink" title="改进的解决方案:"></a>改进的解决方案:</h3><p>让每下一个单品创建出来之后,有一个preVc的属性可以引用它的上一个单品控制器<br>先上图:<br><img src="/img/experience/exp005.png" alt="experience005"><br>此时我们在MainViewController的.h文件中加上对上一个控制器的引用preVc:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, strong) MainViewController *preVc;</span><br></pre></td></tr></table></figure></p>
 <p>然后更改MainViewController跳转到下一个控制器的方法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">UINavigationController *nav = (UINavigationController *)[AppDelegate delegate].window.rootViewController;</span><br><span class="line"></span><br><span class="line">MainViewController * mainVc = [[MainViewController alloc] init];</span><br><span class="line">mainVc.preVc = self;</span><br><span class="line"></span><br><span class="line">if (nav.childViewControllers.count-1 == 2) &#123;</span><br><span class="line"></span><br><span class="line">    [nav popViewControllerAnimated:NO];</span><br><span class="line">    [nav popViewControllerAnimated:NO];</span><br><span class="line"></span><br><span class="line">    [nav pushViewController:mainVc.preVc animated:NO];</span><br><span class="line">    [nav pushViewController:mainVc animated:YES];</span><br><span class="line"></span><br><span class="line">    mainVc.preVc.preVc = nil;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    [nav pushViewController:mainVc animated:YES];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>最后,因为push的控制器都会引用前一个控制器,所以需要<code>mainVc.preVc.preVc = nil;</code>进行释放。<br>至此，完成需求,大功告成!^ _ ^</p>
